@@ -2,7 +2,7 @@
 # ODIN Installation and Usage Guide
 
 ## Overview
-This repository provides tools for training the ODIN model and processing video data for various tasks. The metadata with URLs for all videos can be found at the following link:
+This repository code for downloading the 360-1M dataset, processing the videos, and training the ODIN model. The metadata with URLs for all videos can be found at the following link:
 
 [Metadata with Video URLs](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) 
 
