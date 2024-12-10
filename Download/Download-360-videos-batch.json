@@ -1,0 +1,36 @@
+{
+    "taskGroups": [
+        {
+            "taskSpec": {
+                "runnables": [
+                    {
+                        "container": {
+                            "imageUri": "us-west2-docker.pkg.dev/llm-video/llm-video-docker-repo/download_360videos_highres_onethred_novr@sha256:03ee32a3337cc32a9a4ff0426ee2d9fd67cf15165c23edc97c7c0f43d33a9b57",
+                            "entrypoint": "/bin/sh",
+                            "commands": [
+                                "-c",
+                                "python /app/download_360_videos.py"
+                            ]
+                        }
+                    }
+                ],
+                "computeResource": {
+                    "memoryMib": 64000,
+                    "cpuMilli": 1000
+                },
+                "environment": {
+                    "variables": {
+                        "SHARD_ID": "0",
+                        "N_SHARDS": "1",
+                        "BUCKET_NAME": "360-videos",
+                        "YT_IDS_FPATH": "reza_ids_2.jsonl",
+                        "ROOT_BLOB_DIR": "highres_videos_novr"
+                    }
+                }
+            }
+        }
+    ],
+    "logsPolicy": {
+        "destination": "CLOUD_LOGGING"
+    }
+}
