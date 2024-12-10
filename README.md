@@ -73,8 +73,9 @@ python extract_poses.py --path /path/to/frames
 Download Stable Diffusion Checkpoint
 Download the image-conditioned Stable Diffusion checkpoint released by Lambda Labs:
 
-
+```bash
 wget https://cv.cs.columbia.edu/zero123/assets/sd-image-conditioned-v2.ckpt
+```
 Start Training
 Run the training script:
 
