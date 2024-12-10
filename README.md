@@ -32,7 +32,7 @@ pip install -e taming-transformers/
 git clone https://github.com/openai/CLIP.git
 pip install -e CLIP/
 Processing Videos
-Install MAST3R
+Install MAST3R and yt-dlp
 ```
 a. Clone the MAST3R repository:
 ```bash
@@ -46,6 +46,13 @@ pip install -r requirements.txt
 pip install -r dust3r/requirements.txt
 For detailed installation instructions, visit the MAST3R repository.
 ```
+
+c. Install yt-dlp
+```bash
+pip install yt-dlp
+```
+
+
 ## Data Download and Preprocessing
 Downloading Videos
 The videos can be downloaded using the provided script:
