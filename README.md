@@ -54,12 +54,12 @@ pip install yt-dlp
 
 
 ## Data Download and Preprocessing
-Downloading Videos
 The videos can be downloaded using the provided script:
 
 ```bash
-python downloadvideos.py --path 360-1M.parquet
+python Downloads/download_videos.py --path 360-1M.parquet
 ```
+The total size of all videos at best resolution is about 200 TB. We will soon be releasing a smaller filtered subset to make it easier for people to download. Another note is that downloading videos at too high of a bitrate can lead to throttling or IP blocking. 
 
 ### Extracting Frames
 To extract frames from videos, use the video_to_frames.py script:
