@@ -95,3 +95,6 @@ python main.py \
     --check_val_every_n_epoch 1 \
     --finetune_from sd-image-conditioned-v2.ckpt
 ```
+### Coming Soon
+- Smaller, high quality subset for easier downloading.
+- Model weights and inference code 
