@@ -1,5 +1,4 @@
 # 360-1M
-# ODIN Installation and Usage Guide
 
 ## Overview
 This repository code for downloading the 360-1M dataset, processing the videos, and training the ODIN model. The metadata with URLs for all videos can be found at the following link:
