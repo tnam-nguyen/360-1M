@@ -97,4 +97,4 @@ python main.py \
 ```
 ### Coming Soon
 - Smaller, high quality subset for easier downloading.
-- Model weights and inference code 
+- Model checkpoints and evaluation code. 
