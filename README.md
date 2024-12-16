@@ -51,11 +51,15 @@ pip install yt-dlp
 
 ## Data Download and Preprocessing
 The videos can be downloaded using the provided script:
+```bash
+python DownloadVideos/download_local.py --path 360-1M.parquet
+
+The total size of all videos at max resolution is about 200 TB. We recommend downloading to a cloud platform due to bandwidth limitations and provide a script for use with GCP.
 
 ```bash
-python Downloads/Download_GCP.py --path 360-1M.parquet
+python DownloadVideos/Download_GCP.py --path 360-1M.parquet
 ```
-The total size of all videos at max resolution is about 200 TB. Currently we supply a script for downloading videos at scale to GCP. We will soon release code for downloading a smaller, high-quality subset to facilitate those who want to work with a smaller version of 360-1M.
+We will soon release code for downloading a smaller, high-quality subset to facilitate those who want to work with a smaller version of 360-1M locally. 
 
 ### Extracting Frames
 To extract frames from videos, use the video_to_frames.py script:
