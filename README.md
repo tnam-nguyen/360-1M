@@ -26,11 +26,10 @@ c. Install additional dependencies:
 ```bash
 git clone https://github.com/CompVis/taming-transformers.git
 pip install -e taming-transformers/
-```
-```bash
 git clone https://github.com/openai/CLIP.git
 pip install -e CLIP/
 ```
+
 a. Clone the MAST3R repository:
 ```bash
 git clone --recursive https://github.com/naver/mast3r
