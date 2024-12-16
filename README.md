@@ -30,8 +30,6 @@ pip install -e taming-transformers/
 ```bash
 git clone https://github.com/openai/CLIP.git
 pip install -e CLIP/
-Processing Videos
-Install MAST3R and yt-dlp
 ```
 a. Clone the MAST3R repository:
 ```bash
