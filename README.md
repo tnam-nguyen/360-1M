@@ -10,18 +10,18 @@ This repository code for downloading the 360-1M dataset, processing the videos, 
 ## Installation Guide
 
 ### Environment Setup
-a. Create a new Conda environment:
+1. Create a new Conda environment:
    ```
    conda create -n ODIN python=3.9
    conda activate ODIN
 ```
-b. Clone the repository:
+2. Clone the repository:
 
 ```bash
 cd ODIN
 pip install -r requirements.txt
 ```
-c. Install additional dependencies:
+3. Install additional dependencies:
 
 ```bash
 git clone https://github.com/CompVis/taming-transformers.git
@@ -30,12 +30,12 @@ git clone https://github.com/openai/CLIP.git
 pip install -e CLIP/
 ```
 
-a. Clone the MAST3R repository:
+4. Clone the MAST3R repository:
 ```bash
 git clone --recursive https://github.com/naver/mast3r
 cd mast3r
 ```
-b. Install MAST3R dependencies:
+5. Install MAST3R dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -43,7 +43,7 @@ pip install -r dust3r/requirements.txt
 For detailed installation instructions, visit the MAST3R repository.
 ```
 
-c. Install yt-dlp
+6. Install yt-dlp
 ```bash
 pip install yt-dlp
 ```
