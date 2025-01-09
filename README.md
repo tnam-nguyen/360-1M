@@ -115,5 +115,5 @@ python main.py \
     --finetune_from sd-image-conditioned-v2.ckpt
 ```
 ### Coming Soon
-- Smaller, high quality subset for easier downloading.
-- Model checkpoints
+- High quality subset for easier experimentation.
+- Model weights with inference and fine-tuning code. 
