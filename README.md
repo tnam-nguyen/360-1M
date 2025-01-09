@@ -1,7 +1,17 @@
-# 360-1M
 
-## Overview
-This repository code for downloading the 360-1M dataset, processing the videos, and training the ODIN model. The metadata with URLs for all videos can be found at the following link:
+## [Website](https://mattwallingford.github.io/ODIN/) | [HuggingFace](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) | [Paper](https://openreview.net/pdf?id=otxOtsWCMb) | 
+
+**360-1M** is a large-scale 360° video dataset consisting of over 1 million videos for training video and 3D foundation models. This repository contains the following:
+1. Links to the videos URLs for download from YouTube.
+2. Metadata for each video including category, resolution, and views. 
+2. Code for downloading the videos locally and to Google Cloud Platform (recommended).
+3. Code for filtering, processing, and obtaining camera pose for the videos.
+4. Code for training the novel view synthesis model, [ODIN](https://openreview.net/pdf?id=otxOtsWCMb).
+   
+| **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc-256x256.png" width="256" alt="NYC Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc4.gif" width="256" alt="NYC Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/livingroom-256x256.jpg" width="256" alt="Living Room Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/living_room_zoom.gif" width="256" alt="Living Room Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic-256x256.png" width="256" alt="Picnic Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic2.gif" width="256" alt="Picnic Demo" /> |
+| --- | --- | --- |
+
+
 
 [Metadata with Video URLs](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) 
 
