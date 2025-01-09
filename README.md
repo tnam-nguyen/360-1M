@@ -37,8 +37,8 @@ We will soon release a filtered, high-quality subset to facilitate those who wan
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_top.gif" width="300" alt="Sample 1" />
-  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_bot.gif" width="300" alt="Sample 2" />
+  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_top.gif" width="400" alt="Sample 1" />
+  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_bot.gif" width="400" alt="Sample 2" />
 </p>
 
 
