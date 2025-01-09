@@ -11,13 +11,40 @@
 | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc-256x256.png" width="256" alt="NYC Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc4.gif" width="256" alt="NYC Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/livingroom-256x256.jpg" width="256" alt="Living Room Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/living_room_zoom.gif" width="256" alt="Living Room Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic-256x256.png" width="256" alt="Picnic Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic2.gif" width="256" alt="Picnic Demo" /> |
 | --- | --- | --- |
 
+## Downloading Videos
+Metadata and video URLs can be downloaded from here: [Metadata with Video URLs](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) 
+
+To download the videos we recommend using the yt-dlp package. To run our download scripts you'll also need pandas and pyarrow to parse the metadata parquet:
+```bash
+#Install packages for downloading videos
+pip install yt-dlp
+pip install pandas
+pip install pyarrow
+```
+
+The videos can be downloaded using the provided script:
+```bash
+python DownloadVideos/download_local.py --in_path 360-1M.parquet --out_dir /path/to/videos
+```
+
+The total size of all videos at max resolution is about 200 TB. We recommend downloading to a cloud platform due to bandwidth limitations and provide a script for use with GCP.
+
+```bash
+python DownloadVideos/Download_GCP.py --path 360-1M.parquet
+```
+
+We will soon release a filtered, high-quality subset to facilitate those who want to work with a smaller version of 360-1M locally. 
 
 
-[Metadata with Video URLs](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_top.gif" width="500" alt="Sample 1" />
+  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_bot.gif" width="500" alt="Sample 2" />
+</p>
+
 
 ---
 
-## Installation Guide
+## Installation Guide for Video Processing And Training
 
 ### Environment Setup
 1. Create a new Conda environment:
@@ -53,25 +80,6 @@ pip install -r dust3r/requirements.txt
 For detailed installation instructions, visit the MAST3R repository.
 ```
 
-6. Install yt-dlp
-```bash
-pip install yt-dlp
-```
-
-
-## Data Download and Preprocessing
-The videos can be downloaded using the provided script:
-```bash
-python DownloadVideos/download_local.py --in_path 360-1M.parquet --out_dir /path/to/videos
-```
-
-The total size of all videos at max resolution is about 200 TB. We recommend downloading to a cloud platform due to bandwidth limitations and provide a script for use with GCP.
-
-```bash
-python DownloadVideos/Download_GCP.py --path 360-1M.parquet
-```
-
-We will soon release code for downloading a smaller, high-quality subset to facilitate those who want to work with a smaller version of 360-1M locally. 
 
 ### Extracting Frames
 To extract frames from videos, use the video_to_frames.py script:
@@ -89,13 +97,11 @@ python extract_poses.py --path /path/to/frames
 ```
 
 ## Training
-Download Stable Diffusion Checkpoint
 Download the image-conditioned Stable Diffusion checkpoint released by Lambda Labs:
 
 ```bash
 wget https://cv.cs.columbia.edu/zero123/assets/sd-image-conditioned-v2.ckpt
 ```
-Start Training
 Run the training script:
 
 ```bash
