@@ -2,11 +2,11 @@
 ## [Website](https://mattwallingford.github.io/ODIN/) | [HuggingFace](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) | [Paper](https://openreview.net/pdf?id=otxOtsWCMb) | 
 
 **360-1M** is a large-scale 360° video dataset consisting of over 1 million videos for training video and 3D foundation models. This repository contains the following:
-1. Links to the videos URLs for download from YouTube.
+1. Links to the videos URLs for download from YouTube. We also provide a smaller 24k filtered subset for experimentation.
 2. Metadata for each video including category, resolution, and views. 
-2. Code for downloading the videos locally and to Google Cloud Platform (recommended).
-3. Code for filtering, processing, and obtaining camera pose for the videos.
-4. Code for training the novel view synthesis model, [ODIN](https://openreview.net/pdf?id=otxOtsWCMb).
+3. Code for downloading the videos locally and to Google Cloud Platform (recommended).
+4. Code for filtering, processing, and obtaining camera pose for the videos.
+5. Code for training the novel view synthesis model, [ODIN](https://openreview.net/pdf?id=otxOtsWCMb).
    
 | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc-256x256.png" width="256" alt="NYC Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc4.gif" width="256" alt="NYC Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/livingroom-256x256.jpg" width="256" alt="Living Room Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/living_room_zoom.gif" width="256" alt="Living Room Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic-256x256.png" width="256" alt="Picnic Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic2.gif" width="256" alt="Picnic Demo" /> |
 | --- | --- | --- |
@@ -26,6 +26,10 @@ The videos can be downloaded using the provided script:
 ```bash
 python DownloadVideos/download_local.py --in_path 360-1M.parquet --out_dir /path/to/videos
 ```
+or to download the high quality subset:
+```bash
+python DownloadVideos/download_local.py --in_path Filtered_24k.parquet --out_dir /path/to/videos
+```
 
 The total size of all videos at max resolution is about 200 TB. We recommend downloading to a cloud platform due to bandwidth limitations and provide a script for use with GCP.
 
@@ -33,8 +37,7 @@ The total size of all videos at max resolution is about 200 TB. We recommend dow
 python DownloadVideos/Download_GCP.py --path 360-1M.parquet
 ```
 
-We will soon release a filtered, high-quality subset to facilitate those who want to work with a smaller version of 360-1M locally. 
-
+We also 
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_top.gif" width="410" alt="Sample 1" />
@@ -115,5 +118,4 @@ python main.py \
     --finetune_from sd-image-conditioned-v2.ckpt
 ```
 ### Coming Soon
-- High quality subset for easier experimentation.
 - Model weights with inference and fine-tuning code. 
