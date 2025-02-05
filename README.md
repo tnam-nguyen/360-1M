@@ -11,6 +11,12 @@
 | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc-256x256.png" width="256" alt="NYC Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/nyc4.gif" width="256" alt="NYC Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/livingroom-256x256.jpg" width="256" alt="Living Room Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/living_room_zoom.gif" width="256" alt="Living Room Demo" /> | **Reference Image**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic-256x256.png" width="256" alt="Picnic Reference" /><br>**Generated Scene Trajectory**<br><img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/picnic2.gif" width="256" alt="Picnic Demo" /> |
 | --- | --- | --- |
 
+
+## Setting up a Conda environment with FFMPEG
+```
+conda create -n 360-1M python=3.10 ffmpeg
+conda activate 360-1M
+```
 ## Downloading Videos
 Metadata and video URLs can be downloaded from here: [Metadata with Video URLs](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) .
 The filtered subset which is around 5 TB in size can be found here: [Filtered Subset](https://huggingface.co/datasets/mwallingford/360-1M/blob/main/Filtered_24k.parquet)
@@ -18,16 +24,10 @@ The filtered subset which is around 5 TB in size can be found here: [Filtered Su
 To download the videos we recommend using the yt-dlp package. To run our download scripts you'll also need pandas and pyarrow to parse the metadata parquet:
 ```bash
 #Install packages for downloading videos
-pip install yt-dlp
-pip install pandas
-pip install pyarrow
+pip install -r requirements.txt
 ```
 
-The videos can be downloaded using the provided script:
-```bash
-python DownloadVideos/download_local.py --in_path 360-1M.parquet --out_dir /path/to/videos
-```
-or to download the high quality subset:
+To download the high quality subset:
 ```bash
 python DownloadVideos/download_local.py --in_path Filtered_24k.parquet --out_dir /path/to/videos
 ```
@@ -37,86 +37,74 @@ The total size of all videos at max resolution is about 200 TB. We recommend dow
 ```bash
 python DownloadVideos/Download_GCP.py --path 360-1M.parquet
 ```
-
-We also 
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_top.gif" width="410" alt="Sample 1" />
-  <img src="https://raw.githubusercontent.com/MattWallingford/ODIN/main/sample_bot.gif" width="410" alt="Sample 2" />
-</p>
-
-
 ---
 
 ## Installation Guide for Video Processing And Training
 
-### Environment Setup
-1. Create a new Conda environment:
-   ```
-   conda create -n ODIN python=3.9
-   conda activate ODIN
-```
-2. Clone the repository:
-
-```bash
-cd ODIN
-pip install -r requirements.txt
-```
-3. Install additional dependencies:
-
-```bash
-git clone https://github.com/CompVis/taming-transformers.git
-pip install -e taming-transformers/
-git clone https://github.com/openai/CLIP.git
-pip install -e CLIP/
-```
-
-4. Clone the MAST3R repository:
-```bash
-git clone --recursive https://github.com/naver/mast3r
-cd mast3r
-```
-5. Install MAST3R dependencies:
-
-```bash
-pip install -r requirements.txt
-pip install -r dust3r/requirements.txt
-For detailed installation instructions, visit the MAST3R repository.
-```
-
-
 ### Extracting Frames
 To extract frames from videos, use the video_to_frames.py script:
 
-
 ```bash
-python video_to_frames.py --path /path/to/videos --out /path/to/frames
+python video_to_frames_eqr.py /path/to/videos  /path/to/frames 
 ```
 
-Extracting Pairwise Poses
-Once frames are extracted, pairwise poses can be calculated using:
+To extract frames up to a maximum duration (in seconds), with a specific FPS and resolution:
 
 ```bash
-python extract_poses.py --path /path/to/frames
+python video_to_frames_eqr.py /path/to/videos  /path/to/frames --fps 30 --max_duration 10 --max_height 1024
 ```
 
-## Training
-Download the image-conditioned Stable Diffusion checkpoint released by Lambda Labs:
+### Extracting EQR Poses using SphereSFM
+
+#### Build SphereSFM -- A modified version of COLMAP with spherical images support
+```
+### Tested on Ubuntu WSL 2 -- CPU build ###
+sudo apt-get install \
+    git \
+    cmake \
+    ninja-build \
+    build-essential \
+    libboost-program-options-dev \
+    libboost-graph-dev \
+    libboost-system-dev \
+    libeigen3-dev \
+    libflann-dev \
+    libfreeimage-dev \
+    libmetis-dev \
+    libgoogle-glog-dev \
+    libgtest-dev \
+    libgmock-dev \
+    libsqlite3-dev \
+    libglew-dev \
+    qtbase5-dev \
+    libqt5opengl5-dev \
+    libcgal-dev \
+    libceres-dev \
+    libboost-all-dev
+
+
+git clone https://github.com/json87/SphereSfM.git
+cd SphereSfM
+mkdir build
+cd build
+cmake .. -GNinja
+ninja
+sudo ninja install
+```
+
+For **CUDA-Support**, follow to the offical COLMAP build-instructions https://colmap.github.io/install.html#installation, but clone the SphereSfm repository instead of the official COLMAP repository.
+
+
+After building SphereSFM, we can get image poses from the extracted EQR by using:
 
 ```bash
-wget https://cv.cs.columbia.edu/zero123/assets/sd-image-conditioned-v2.ckpt
+python extract_poses_eqr.py  /path/to/frames /path/to/colmap_out
 ```
-Run the training script:
+The camera poses of all frames of the scene should be in `/path/to/colmap_out/scene_name/sparse/0/cameras.bin`
 
-```bash
-python main.py \
-    -t \
-    --base configs/sd-ODIN-finetune-c_concat-256.yaml \
-    --gpus 0,1,2,3,4,5,6,7 \
-    --scale_lr False \
-    --num_nodes 1 \
-    --check_val_every_n_epoch 1 \
-    --finetune_from sd-image-conditioned-v2.ckpt
+To visualize the COLMAP output for each scene
 ```
-### Coming Soon
-- Model weights with inference and fine-tuning code. 
+colmap gui --database_path ./path/to/colmap_out/scene_name/database.db --image_path  ./path/to/frames/scene_name/ --import_path ./path/to/colmap_out/scene_name/sparse/0
+```
+
+
