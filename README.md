@@ -59,7 +59,7 @@ python video_to_frames_eqr.py /path/to/videos  /path/to/frames --fps 30 --max_du
 #### Build SphereSFM -- A modified version of COLMAP with spherical images support
 
 ```
-### Tested on Ubuntu WSL 2 -- CUDA-supported build ###
+### Tested on Ubuntu 22.04 WSL 2 -- CUDA-supported build ###
 
 #1 - Install dependencies
 sudo apt-get install -y \
@@ -75,7 +75,7 @@ sudo apt-get install -y \
     nvidia-cuda-toolkit \
     nvidia-cuda-toolkit-gcc
 
-#3 - Set up GCC/G++ 10 as the compiler
+#3 - Set up GCC/G++ 10 as the compiler (for Ubuntu 22.04)
 sudo apt-get install gcc-10 g++-10
 export CC=/usr/bin/gcc-10
 export CXX=/usr/bin/g++-10
