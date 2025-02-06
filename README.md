@@ -91,7 +91,7 @@ cd build
 nvidia-smi --query-gpu=compute_cap --format=csv
 
 #6 - Start CMake, replace XX with your GPU compute capability from the previous step
-cmake .. -GNinja-DCMAKE_CUDA_ARCHITECTURES=XX
+cmake .. -GNinja -DCMAKE_CUDA_ARCHITECTURES=XX
 
 #7 - Start the build
 ninja
