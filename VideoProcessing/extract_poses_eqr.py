@@ -66,7 +66,7 @@ def run_colmap(scene_path, output_path, run_dense_construction):
         "--ImageReader.camera_model", "SPHERE",
         "--ImageReader.camera_params", "1,2048,1024",
         "--ImageReader.single_camera", "1",
-        "--SiftExtraction.max_num_features", "16000"
+        "--SiftExtraction.max_num_features", "25000"
     ])
     
     # # Spatial matching
@@ -77,7 +77,7 @@ def run_colmap(scene_path, output_path, run_dense_construction):
         "--SiftMatching.min_num_inliers", "50",
         "--SpatialMatching.is_gps", "0",
         "--SpatialMatching.max_distance", "50",
-        "--SiftMatching.max_num_matches", "16000"
+        "--SiftMatching.max_num_matches", "25000"
     ])
     
     # # Sparse reconstruction
