@@ -18,12 +18,17 @@ def extract_frames(input_dir, output_dir, fps, max_duration, max_height):
             
             ffmpeg_command = [
                 "ffmpeg",
-                "-i", input_path,       # Input video
-                "-vf", f"fps={fps}",  # Set frame rate
+                "-i", input_path       # Input video
             ]
-
+            filter_str = []
+            if fps is not None:
+                filter_str.append(f"fps={fps}")
             if max_height is not None:
-                ffmpeg_command[-1] += f",scale={max_height*2}:{max_height}"
+                filter_str.append(f"scale={max_height*2}:{max_height}")
+            
+            if filter_str:
+                ffmpeg_command.extend(["-vf", ",".join(filter_str)])
+                
             if max_duration is not None:
                 ffmpeg_command.extend(["-t", str(max_duration)])  # Limit extraction to max_duration seconds
             
@@ -37,7 +42,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Extract EQR frames from MP4 videos using FFmpeg.")
     parser.add_argument("input_dir", help="Path to the directory containing MP4 videos.")
     parser.add_argument("output_dir", help="Path to the directory where extracted frames will be stored.")
-    parser.add_argument("--fps", type=int, help="Frames per second for extracted frames.", default=30)
+    parser.add_argument("--fps", type=int, help="Frames per second for extracted frames.", default=None)
     parser.add_argument("--max_duration", type=int, help="Maximum duration (in seconds) to extract frames from each video.", default=None)
     parser.add_argument("--max_height", type=int, default=None, help="Maximum height for resampling the video. If None, keep the original resolution.")
     
