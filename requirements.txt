@@ -2,3 +2,28 @@ yt-dlp
 numpy
 pandas
 pyarrow
+pyequilib
+moviepy
+scikit-learn
+roma
+gradio
+matplotlib
+tqdm
+opencv-python
+scipy
+einops
+trimesh
+tensorboard
+pyglet<2
+huggingface-hub[torch]>=0.22
+pillow-heif  # add heif/heic image support
+pyrender  # for rendering depths in scannetpp
+kapture  # for visloc data loading
+kapture-localization
+numpy-quaternion
+pycolmap  # for pnp
+poselib  # for pnp
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch==2.4.1
+torchvision 
+torchaudio

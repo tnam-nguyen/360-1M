@@ -12,20 +12,18 @@
 | --- | --- | --- |
 
 
-## Setting up a Conda environment with FFMPEG
+## Setting up a Python environment using Conda
 ```
 conda create -n 360-1M python=3.10 ffmpeg
 conda activate 360-1M
+pip install -r requirements.txt
 ```
 ## Downloading Videos
 Metadata and video URLs can be downloaded from here: [Metadata with Video URLs](https://huggingface.co/datasets/mwallingford/360-1M/tree/main) .
 The filtered subset which is around 5 TB in size can be found here: [Filtered Subset](https://huggingface.co/datasets/mwallingford/360-1M/blob/main/Filtered_24k.parquet)
 
-To download the videos we recommend using the yt-dlp package. To run our download scripts you'll also need pandas and pyarrow to parse the metadata parquet:
-```bash
-#Install packages for downloading videos
-pip install -r requirements.txt
-```
+
+
 
 To download the high quality subset:
 ```bash
@@ -45,71 +43,33 @@ python DownloadVideos/Download_GCP.py --path 360-1M.parquet
 To extract frames from videos, use the video_to_frames.py script:
 
 ```bash
-python video_to_frames_eqr.py /path/to/videos  /path/to/frames 
-```
-
-To extract frames up to a maximum duration (in seconds), with a specific FPS and resolution:
-
-```bash
-python video_to_frames_eqr.py /path/to/videos  /path/to/frames --fps 30 --max_duration 10 --max_height 1024
-```
-
-### Extracting EQR Poses using SphereSFM
-
-#### Build SphereSFM -- A modified version of COLMAP with spherical images support
-
-```
-### Tested on Ubuntu 22.04 WSL 2 -- CUDA-supported build ###
-
-#1 - Install dependencies
-sudo apt-get install -y \
-    git cmake ninja-build build-essential \
-    libboost-program-options-dev libboost-graph-dev libboost-system-dev \
-    libeigen3-dev libflann-dev libfreeimage-dev libmetis-dev \
-    libgoogle-glog-dev libgtest-dev libgmock-dev libsqlite3-dev \
-    libglew-dev qtbase5-dev libqt5opengl5-dev libcgal-dev \
-    libceres-dev libboost-all-dev
-
-#2 - Install CUDA Toolkit and CUDA Compiler
-sudo apt-get install -y \
-    nvidia-cuda-toolkit \
-    nvidia-cuda-toolkit-gcc
-
-#3 - Set up GCC/G++ 10 as the compiler (for Ubuntu 22.04)
-sudo apt-get install gcc-10 g++-10
-export CC=/usr/bin/gcc-10
-export CXX=/usr/bin/g++-10
-export CUDAHOSTCXX=/usr/bin/g++-10
-
-#4 - Clone and Set Up SphereSfM
-git clone https://github.com/json87/SphereSfM.git
-cd SphereSfM
-mkdir build
-cd build
-
-#5 - Check GPU compute capability
-nvidia-smi --query-gpu=compute_cap --format=csv
-
-#6 - Start CMake, replace XX with your GPU compute capability from the previous step
-cmake .. -GNinja -DCMAKE_CUDA_ARCHITECTURES=XX
-
-#7 - Start the build
-ninja
-sudo ninja install
+python video_to_frames.py /path/to/videos  /path/to/frames 
 ```
 
 
+### Generating Camera Poses using mast3r
 
-After building SphereSFM, we can get image poses from the extracted EQR by using:
+#### 
 
-```bash
-python extract_poses_eqr.py  /path/to/frames /path/to/colmap_out
 ```
-The camera poses of all frames of the scene should be in `/path/to/colmap_out/scene_name/sparse/0/cameras.bin`
+1 - Clone the repository
+cd VideoProcessing
+mkdir third_party
+cd third_party
+git clone --recursive https://github.com/naver/mast3r
 
-To visualize the COLMAP output for each scene
+2 - Download model checkpoint
+cd mast3r
+mkdir -p checkpoints/
+wget https://download.europe.naverlabs.com/ComputerVision/MASt3R/MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric.pth -P checkpoints/
+
+3 - Go back to the top directory
+cd ../../../
 ```
-colmap gui --database_path ./path/to/colmap_out/scene_name/database.db --image_path  ./path/to/frames/scene_name/ --import_path ./path/to/colmap_out/scene_name/sparse/0
+
+Then, run
+```
+python extract_poses.py  --root-folder /path/to/frames --output-root /path/to/pose_out
 ```
 
 

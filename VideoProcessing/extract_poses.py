@@ -10,15 +10,12 @@ import tempfile
 from tqdm import tqdm
 import sys
 import math
-sys.path.append(".")
-
+MAST3R_PATH = "./VideoProcessing/third_party/mast3r"
+sys.path.append(MAST3R_PATH)
 from third_party.mast3r.mast3r.model import AsymmetricMASt3R
 from third_party.mast3r.mast3r.cloud_opt.sparse_ga import sparse_global_alignment
 from third_party.mast3r.dust3r.dust3r.inference import inference
 from third_party.mast3r.dust3r.dust3r.utils.image import load_images
-
-from config_util import LazyConfig, instantiate
-
 
 def make_pairs(
     imgs, scene_graph="swin", iscyclic=True, winsize=3, symmetrize=True, prefilter=None
@@ -143,22 +140,14 @@ def delete_folder(folder_name):
 def process_frames(video_name, input_root, output_root, args):
     device = torch.device("cuda")
 
-    master_ckpt_path = os.environ.get(
-        "MAST3R_CHECKPOINT",
-        "/checkpoint/dream/vkramanuj/models/mast3r"
-    )
+    checkpoint_path = os.path.join(MAST3R_PATH, "checkpoints",  "MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric.pth")
 
-    model_name = os.path.join(
-        master_ckpt_path,
-        "MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric.pth"
-    )
-
-    model = AsymmetricMASt3R.from_pretrained(model_name).to(device)
+    model = AsymmetricMASt3R.from_pretrained(checkpoint_path).to(device)
     out_path = os.path.join(output_root, video_name)
     os.makedirs(out_path, exist_ok=True)
 
     folder_name = os.path.join(
-        input_root, video_name
+        input_root, video_name, "pers"
     )  # os.path.splitext(video_basename)[0]
 
     lr1 = args.lr1
