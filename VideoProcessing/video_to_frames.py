@@ -38,49 +38,43 @@ def parse_video(video_path, output_folder, use_gpu= False):
     duration = video_clip.duration
     num_frames = int(duration * fps)
     frame_iter = video_clip.iter_frames(fps = fps) ## Might be faster to retreive the frames rather than manual seeking
-   
+    
+    ## Rotations for perspective projections
+    yaws = [ 2 * np.pi / 5 * j for j in range(5)]
+    rots = [{'pitch':0, 'roll':0, 'yaw': yaw} for yaw in yaws]
     
     for i, frame in enumerate(tqdm(frame_iter, video_path, total=num_frames)):
         # print(f"Processing frame {i} of video {video_path}")
         # Convert frame to the required format (RGB)
         equi_img = frame
         output_path = os.path.join(output_folder_eqrs, f"frame_{i}.png")
-        imwrite(output_path,  np.uint8(equi_img))
-        # equi_img_pil.save(output_path)        
+        imwrite(output_path,  np.uint8(equi_img)) 
         
         equi_img = np.transpose(equi_img, (2, 0, 1))
         if use_gpu:
             equi_img = torch.from_numpy(equi_img).cuda()
-
-
-        # Rotate frame to capture 4 images per frame (yaw rotation at 90 degrees)
-        for j in range(5):
-            output_path = os.path.join(output_folder_pers, f"frame_{i}_{j}.png")
-            if not os.path.exists(output_path):
-               
-                # Calculate rotation angles
-                yaw = 2 * np.pi / 5 * j  # Rotate yaw at 90 degrees per image
-                
-                # Obtain perspective image
-                pers_img = equi2pers(
+            equi_img = equi_img.unsqueeze(0).expand(5,-1,-1,-1) ## Repeat 5 times
+        else:
+            equi_img = np.tile(np.expand_dims(equi_img, 0), (5,1,1,1)) ## Repeat 5 times
+        
+        pers_imgs = equi2pers(
                     equi=equi_img,
-                    rots={'pitch':0, 'roll':0, 'yaw': yaw},  # Rotate yaw
+                    rots=rots,  
                 )
-                
-                if use_gpu:
-                    pers_img = pers_img.cpu().numpy()
-                
-                # Convert to PIL image
-                pers_img_array = np.uint8(np.transpose(pers_img, (1, 2, 0)))  # Un-transpose
-                
-                # Save the frame as an image file if it doesn't exist already
-                output_path = os.path.join(output_folder_pers, f"frame_{i}_{j}.png")
-                imwrite(output_path, pers_img_array)
-            else:
-                print(f"Skipping frame {i}_{j}.png as it already exists.")
+        if use_gpu:
+            pers_imgs = pers_imgs.to(torch.uint8).permute(0, 2,3,1).cpu().numpy()
+        else:
+            pers_imgs = pers_imgs.astype(np.uint8).transpose(0,2,3,1)
+      
+        # Rotate frame to capture 4 images per frame (yaw rotation at 90 degrees)
+        for j, pers_img in enumerate(pers_imgs):
+            output_path = os.path.join(output_folder_pers, f"frame_{i}_{j}.png")
+            imwrite(output_path, pers_img)
         
     # Close the video clip
     video_clip.close()
+
+
 
 def process_videos(video_folder, output_folder):
     os.makedirs(output_folder, exist_ok=True)
